@@ -1,27 +1,31 @@
 package org.demoClasePooc125.model;
 
 public class Curso {
-    private Long id;
+
+    private int id;
     private String nombre;
     private String descripcion;
-    private Boolean estado;
+    private String estado;
 
-    public Curso() {
-    }
-
-    public Curso(Long id, String nombre, String descripcion, Boolean estado) {
+    public Curso(int id, String nombre, String descripcion, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.estado = estado;
     }
 
-    // Getters y Setters
-    public Long getId() {
+    public Curso(String nombre, String descripcion, String estado) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,11 +45,11 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
-    public Boolean getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 }

@@ -11,26 +11,26 @@ public class Conexion {
     private static final String PASSWORD = "jXc7w:|7Gy;";
 
 
-    //Ocupamos una funcion conexion
+    //Ocupamos una función de conexión
     public static Connection getConnection() {
         try{
-            return DriverManager.getConnection(URL, USER, PASSWORD);
+            return DriverManager.getConnection(URL,USER,PASSWORD);
         } catch (SQLException e) {
-            System.out.println("Error al conectar:" + e.getMessage());
+            System.out.println("Error al conectar:"+ e.getMessage());
             return null;
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         Connection con = getConnection();
 
         if (con != null) {
-            System.out.println("Conectado a la base de datos");
+            System.out.println("Conectado con la base de datos");
 
             try{
                 con.close();
             } catch (SQLException e) {
-                System.out.println("Error al desconectar:" + e.getMessage());
+                System.out.println("Error al desconectar:"+ e.getMessage());
             }
 
         }else {
@@ -41,9 +41,10 @@ public class Conexion {
 }
 
 
+
+
+
 //clave: jXc7w:|7Gy;
-//Tú
-//18:08
 //base de datos u484426513_ppoc225
 //usuario u484426513_ppoc225
 //srv863.hstgr.io o puede usar esta IP como tu nombre de host: 45.88.196.5

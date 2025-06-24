@@ -1,17 +1,17 @@
 package org.demoClasePooc125.model;
 
+import java.time.LocalDate;
+
 public class Profesor {
-    private Long id;
+
+    private int id;
     private String nombre;
     private String identificacion;
     private String email;
     private String departamento;
-    private Boolean estado;
+    private String estado;
 
-    public Profesor() {
-    }
-
-    public Profesor(Long id, String nombre, String identificacion, String email, String departamento, Boolean estado) {
+    public Profesor(int id, String nombre, String identificacion, String email, String departamento, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.identificacion = identificacion;
@@ -20,12 +20,21 @@ public class Profesor {
         this.estado = estado;
     }
 
-    // Getters y Setters
-    public Long getId() {
+    public Profesor(String nombre, String identificacion, String email, String departamento, String estado) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.identificacion = identificacion;
+        this.email = email;
+        this.departamento = departamento;
+        this.estado = estado;
+    }
+
+    //Getters y Setters
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -61,11 +70,12 @@ public class Profesor {
         this.departamento = departamento;
     }
 
-    public Boolean getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
+
     }
 }

@@ -1,6 +1,5 @@
 package org.demoClasePooc125.model;
 
-
 public class Grupo {
 
     private int id;
@@ -15,13 +14,12 @@ public class Grupo {
         this.estado = estado;
     }
 
-    public Grupo(String nombre, String descripcion, String estado) {
+    public Grupo( String nombre, String descripcion, String estado) {
         this.id = 0;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.estado = estado;
     }
-
 
     public int getId() {
         return id;

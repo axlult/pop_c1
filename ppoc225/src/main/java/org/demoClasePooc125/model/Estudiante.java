@@ -3,31 +3,41 @@ package org.demoClasePooc125.model;
 import java.time.LocalDate;
 
 public class Estudiante {
-    private Long id;
+
+    private int id;
     private String nombre;
     private String identificacion;
     private String email;
-    private LocalDate fechaNacimiento;
-    private Boolean estado;
+    private LocalDate fecha_nacimiento;
+    private String estado;
 
-    public Estudiante() {
-    }
-
-    public Estudiante(Long id, String nombre, String identificacion, String email, LocalDate fechaNacimiento, Boolean estado) {
+    // Constructor con ID (útil para lecturas desde la base de datos)
+    public Estudiante(int id, String nombre, String identificacion, String email, LocalDate fecha_nacimiento, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.identificacion = identificacion;
         this.email = email;
-        this.fechaNacimiento = fechaNacimiento;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.estado = estado;
+    }
+
+    // Constructor sin ID (útil para insertar nuevos registros)
+    public Estudiante(String nombre, String identificacion, String email, LocalDate fecha_nacimiento, String estado) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.identificacion = identificacion;
+        this.email = email;
+        this.fecha_nacimiento = fecha_nacimiento;
         this.estado = estado;
     }
 
     // Getters y Setters
-    public Long getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,19 +65,19 @@ public class Estudiante {
         this.email = email;
     }
 
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
+    public LocalDate getfecha_nacimiento() {
+        return fecha_nacimiento;
     }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setfecha_nacimiento(LocalDate fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
     }
 
-    public Boolean getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 }

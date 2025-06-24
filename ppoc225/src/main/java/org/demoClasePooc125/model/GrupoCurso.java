@@ -1,41 +1,48 @@
 package org.demoClasePooc125.model;
 
 public class GrupoCurso {
-    private Long id;
-    private Long grupoId;
-    private Long cursoId;
 
-    public GrupoCurso() {
-    }
+    private int id;
+    private int grupoId;
+    private int cursoId;
 
-    public GrupoCurso(Long id, Long grupoId, Long cursoId) {
+    public GrupoCurso(int id, int grupoId, int cursoId) {
         this.id = id;
         this.grupoId = grupoId;
         this.cursoId = cursoId;
     }
 
-    // Getters y Setters
-    public Long getId() {
+    // Constructor sin ID (cuando vas a insertar uno nuevo)
+    public GrupoCurso(int grupoId, int cursoId) {
+        this.id = 0;
+        this.grupoId = grupoId;
+        this.cursoId = cursoId;
+    }
+
+    // Getters y setters
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getGrupoId() {
+    public int getGrupoId() {
         return grupoId;
     }
 
-    public void setGrupoId(Long grupoId) {
+    public void setGrupoId(int grupoId) {
         this.grupoId = grupoId;
     }
 
-    public Long getCursoId() {
+    public int getCursoId() {
         return cursoId;
     }
 
-    public void setCursoId(Long cursoId) {
+    public void setCursoId(int cursoId) {
         this.cursoId = cursoId;
     }
 }
+
