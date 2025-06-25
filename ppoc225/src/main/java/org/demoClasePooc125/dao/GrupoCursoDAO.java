@@ -13,27 +13,36 @@ public class GrupoCursoDAO {
     public List<GrupoCurso> obtenerGrupoCurso() {
         List<GrupoCurso> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM dario_GrupoCurso";
 
-        try {
-            Connection con = Conexion.getConnection();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql); {
+        String sql = "SELECT gc.id, gc.grupo_id, gc.curso_id, "
+                + "g.nombre AS grupo_name, "
+                + "c.nombre AS curso_name "
+                + "FROM dario_GrupoCurso gc "
+                + "JOIN dario_Grupo g ON gc.grupo_id = g.id "
+                + "JOIN dario_Curso c ON gc.curso_id = c.id";
 
-                while (rs.next()) {
-                    GrupoCurso items = new GrupoCurso(
-                            rs.getInt("id"),
-                            rs.getInt("grupo_id"),
-                            rs.getInt("curso_id")
-                    );
-                    lista.add(items);
-                }
+        try (Connection com = Conexion.getConnection();
+             Statement stmt = com.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                GrupoCurso items = new GrupoCurso(
+                        rs.getInt("id"),
+                        rs.getInt("grupo_id"),
+                        rs.getInt("curso_id")
+                );
+                // Set names from joined tables
+                items.setGroupName(rs.getString("grupo_name"));
+                items.setCursoName(rs.getString("curso_name"));
+                lista.add(items);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return lista;
+
+
+
     }
 
     // Insertar una nueva relación grupo-curso
