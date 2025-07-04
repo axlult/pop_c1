@@ -1,0 +1,41 @@
+# === Java ===
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# Compiled files
+bin/
+out/
+build/
+
+# === Maven ===
+target/
+
+# === Gradle ===
+.gradle/
+build/
+
+# === IntelliJ IDEA ===
+
+# === VS Code (si lo usas también) ===
+.vscode/
+
+# === Sistema operativo ===
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# === Entornos ===
+.env
+*.env
+
+# === Archivos personales ===
+*.swp
+*~
