@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/java-spring" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -28,7 +28,7 @@
     "Application.GrupoCursoView.executor": "Run",
     "Application.GrupoView.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "olman-dev",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/aulat/Documents/u/java-spring",
     "node.js.detected.package.eslint": "true",
@@ -71,6 +71,7 @@
       <workItem from="1750796375827" duration="6955000" />
       <workItem from="1750874424045" duration="2117000" />
       <workItem from="1751660671647" duration="635000" />
+      <workItem from="1751661859085" duration="445000" />
     </task>
     <servers />
   </component>
