@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/java-spring" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -28,9 +28,9 @@
     "Application.GrupoCursoView.executor": "Run",
     "Application.GrupoView.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "olman-dev",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/aulat/Documents/u/java-spring",
+    "last_opened_file_path": "C:/Users/aulat/Documents/u/poo/caso1/pop_c1/pop_backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,10 +72,23 @@
       <workItem from="1750874424045" duration="2117000" />
       <workItem from="1751660671647" duration="635000" />
       <workItem from="1751661859085" duration="445000" />
+      <workItem from="1751666265321" duration="747000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/ppoc225/src/main/java/org/demoClasePooc125/misc/Conexion.java</url>
+          <line>8</line>
+          <properties field="URL" class="org.demoClasePooc125.misc.Conexion" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
