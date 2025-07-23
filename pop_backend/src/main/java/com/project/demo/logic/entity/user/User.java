@@ -1,5 +1,6 @@
 package com.project.demo.logic.entity.user;
 import com.project.demo.logic.entity.rol.Role;
+import com.project.demo.logic.entity.rol.RoleEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,10 +20,7 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String lastname;
-    private String provincia;
-    private String canton;
-    private String distrito;
-    private int telefono;
+
 
     @Column(unique = true, length = 100, nullable = false)
     private String email;
@@ -44,12 +42,14 @@ public class User implements UserDetails {
         return List.of(authority);
     }
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+
+    @ManyToOne(fetch = FetchType.EAGER) // Ensure role is always loaded
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 
     // Constructors
-    public User() {}
+    public User() {
+    }
 
 
     @Override
