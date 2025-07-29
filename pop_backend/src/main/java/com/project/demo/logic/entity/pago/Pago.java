@@ -4,7 +4,7 @@ import com.project.demo.logic.entity.membresia.Membresia;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
-
+@Table(name = "axel_pago")
 @Entity
 public class Pago {
     @Id

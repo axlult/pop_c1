@@ -3,7 +3,7 @@ package com.project.demo.logic.entity.clasegimnasio;
 import com.project.demo.logic.entity.user.User;
 import jakarta.persistence.*;
 import java.util.Objects;
-
+@Table(name = "axel_clasegimnacio")
 @Entity
 public class ClaseGimnasio {
     @Id

@@ -4,7 +4,7 @@ import com.project.demo.logic.entity.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+@Table(name = "axel_reporte")
 @Entity
 public class Reporte {
     @Id

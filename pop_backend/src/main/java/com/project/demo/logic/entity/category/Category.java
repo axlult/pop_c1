@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 import java.util.Objects;
-
+@Table(name = "axel_category")
 @Entity
 public class Category {
 
