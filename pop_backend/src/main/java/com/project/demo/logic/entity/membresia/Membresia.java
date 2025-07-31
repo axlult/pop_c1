@@ -1,8 +1,10 @@
 package com.project.demo.logic.entity.membresia;
 
+import com.project.demo.logic.entity.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+
 @Table(name = "axel_membresia")
 @Entity
 public class Membresia {
@@ -22,16 +24,22 @@ public class Membresia {
     @Column(nullable = false)
     private String estado;
 
+    // Relación 1:1 con User
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
     // Constructor por defecto
     public Membresia() {
     }
 
     // Constructor con parámetros
-    public Membresia(String tipo, LocalDate inicio, LocalDate vencimiento, String estado) {
+    public Membresia(String tipo, LocalDate inicio, LocalDate vencimiento, String estado, User user) {
         this.tipo = tipo;
         this.inicio = inicio;
         this.vencimiento = vencimiento;
         this.estado = estado;
+        this.user = user;
     }
 
     // Métodos de negocio
@@ -89,7 +97,15 @@ public class Membresia {
         this.estado = estado;
     }
 
-    // equals, hashCode y toString
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // equals, hashCode y toString actualizados
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,12 +115,13 @@ public class Membresia {
                 Objects.equals(tipo, membresia.tipo) &&
                 Objects.equals(inicio, membresia.inicio) &&
                 Objects.equals(vencimiento, membresia.vencimiento) &&
-                Objects.equals(estado, membresia.estado);
+                Objects.equals(estado, membresia.estado) &&
+                Objects.equals(user, membresia.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, tipo, inicio, vencimiento, estado);
+        return Objects.hash(id, tipo, inicio, vencimiento, estado, user);
     }
 
     @Override
@@ -115,6 +132,7 @@ public class Membresia {
                 ", inicio=" + inicio +
                 ", vencimiento=" + vencimiento +
                 ", estado='" + estado + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

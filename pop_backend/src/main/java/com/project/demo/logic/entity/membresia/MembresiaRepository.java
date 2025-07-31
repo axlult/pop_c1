@@ -14,6 +14,9 @@ public interface MembresiaRepository extends JpaRepository<Membresia, Long> {
     // Buscar membresías por estado
     List<Membresia> findByEstado(String estado);
 
+    // Buscar membresía por ID de usuario
+    Optional<Membresia> findByUserId(Long userId);
+
     // Buscar membresías que vencen antes de cierta fecha
     List<Membresia> findByVencimientoBefore(LocalDate fecha);
 

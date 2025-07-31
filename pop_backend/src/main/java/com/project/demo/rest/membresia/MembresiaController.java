@@ -2,6 +2,8 @@ package com.project.demo.rest.membresia;
 
 import com.project.demo.logic.entity.membresia.Membresia;
 import com.project.demo.logic.entity.membresia.MembresiaRepository;
+import com.project.demo.logic.entity.user.User;
+import com.project.demo.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,9 @@ public class MembresiaController {
     @Autowired
     private MembresiaRepository membresiaRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     // Obtener todas las membresías
     @GetMapping
     public List<Membresia> getAllMembresias() {
@@ -32,13 +37,33 @@ public class MembresiaController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Obtener membresía por ID de usuario
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<Membresia> getMembresiaByUsuario(@PathVariable Long userId) {
+        Optional<Membresia> membresia = membresiaRepository.findByUserId(userId);
+        return membresia.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     // Crear nueva membresía
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public Membresia createMembresia(@RequestBody Membresia membresia) {
+    public ResponseEntity<Membresia> createMembresia(@RequestBody Membresia membresia) {
+        // Validar que el usuario existe
+        if (membresia.getUser() == null || membresia.getUser().getId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> userOpt = userRepository.findById(membresia.getUser().getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         // Validación básica de fechas
-        if (membresia.getVencimiento().isBefore(membresia.getInicio())) {
-            throw new IllegalArgumentException("La fecha de vencimiento no puede ser anterior a la de inicio");
+        if (membresia.getVencimiento() != null &&
+                membresia.getInicio() != null &&
+                membresia.getVencimiento().isBefore(membresia.getInicio())) {
+            return ResponseEntity.badRequest().build();
         }
 
         // Establecer estado inicial si no viene definido
@@ -46,7 +71,11 @@ public class MembresiaController {
             membresia.setEstado("Activa");
         }
 
-        return membresiaRepository.save(membresia);
+        // Asignar el usuario completo
+        membresia.setUser(userOpt.get());
+
+        Membresia nuevaMembresia = membresiaRepository.save(membresia);
+        return ResponseEntity.ok(nuevaMembresia);
     }
 
     // Actualizar membresía
@@ -58,10 +87,37 @@ public class MembresiaController {
 
         return membresiaRepository.findById(id)
                 .map(membresia -> {
-                    membresia.setTipo(membresiaDetails.getTipo());
-                    membresia.setInicio(membresiaDetails.getInicio());
-                    membresia.setVencimiento(membresiaDetails.getVencimiento());
-                    membresia.setEstado(membresiaDetails.getEstado());
+                    // Actualizar campos básicos
+                    if (membresiaDetails.getTipo() != null) {
+                        membresia.setTipo(membresiaDetails.getTipo());
+                    }
+
+                    if (membresiaDetails.getInicio() != null) {
+                        membresia.setInicio(membresiaDetails.getInicio());
+                    }
+
+                    if (membresiaDetails.getVencimiento() != null) {
+                        // Validar fecha de vencimiento
+                        if (membresia.getInicio() != null &&
+                                membresiaDetails.getVencimiento().isBefore(membresia.getInicio())) {
+                            throw new IllegalArgumentException("La fecha de vencimiento no puede ser anterior a la de inicio");
+                        }
+                        membresia.setVencimiento(membresiaDetails.getVencimiento());
+                    }
+
+                    if (membresiaDetails.getEstado() != null) {
+                        membresia.setEstado(membresiaDetails.getEstado());
+                    }
+
+                    // Actualizar usuario si se proporciona
+                    if (membresiaDetails.getUser() != null && membresiaDetails.getUser().getId() != null) {
+                        Optional<User> userOpt = userRepository.findById(membresiaDetails.getUser().getId());
+                        if (userOpt.isPresent()) {
+                            membresia.setUser(userOpt.get());
+                        } else {
+                            throw new IllegalArgumentException("Usuario no encontrado");
+                        }
+                    }
 
                     Membresia updatedMembresia = membresiaRepository.save(membresia);
                     return ResponseEntity.ok(updatedMembresia);
@@ -91,8 +147,8 @@ public class MembresiaController {
         if (optionalMembresia.isPresent()) {
             Membresia membresia = optionalMembresia.get();
             membresia.renovar(diasExtension);
-            membresiaRepository.save(membresia);
-            return ResponseEntity.ok(membresia);
+            Membresia updated = membresiaRepository.save(membresia);
+            return ResponseEntity.ok(updated);
         }
         return ResponseEntity.notFound().build();
     }
@@ -105,8 +161,8 @@ public class MembresiaController {
         if (optionalMembresia.isPresent()) {
             Membresia membresia = optionalMembresia.get();
             membresia.cancelar();
-            membresiaRepository.save(membresia);
-            return ResponseEntity.ok(membresia);
+            Membresia updated = membresiaRepository.save(membresia);
+            return ResponseEntity.ok(updated);
         }
         return ResponseEntity.notFound().build();
     }
@@ -132,5 +188,12 @@ public class MembresiaController {
     public List<Membresia> getMembresiasProximasAVencer() {
         LocalDate fechaLimite = LocalDate.now().plusDays(7);
         return membresiaRepository.findByVencimientoBefore(fechaLimite);
+    }
+
+    // Obtener membresías activas con información de usuario
+    @GetMapping("/activas")
+    public ResponseEntity<List<Membresia>> getMembresiasActivas() {
+        List<Membresia> activas = membresiaRepository.findMembresiasActivas();
+        return ResponseEntity.ok(activas);
     }
 }
