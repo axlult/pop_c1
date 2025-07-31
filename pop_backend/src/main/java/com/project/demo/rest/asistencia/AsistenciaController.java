@@ -26,7 +26,19 @@ public class AsistenciaController {
     // Registrar nueva asistencia
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPCIONISTA', 'SUPER_ADMIN')")
-    public ResponseEntity<Asistencia> registrarAsistencia(@RequestParam Long userId) {
+    public ResponseEntity<Asistencia> registrarAsistencia(@RequestBody AsistenciaRequest request) {
+        // Extraer el ID de usuario del objeto recibido
+        Long userId = request.getUserId();
+
+        // Si no viene en el campo directo, intentar extraerlo del objeto user
+        if(userId == null && request.getUser() != null) {
+            userId = request.getUser().getId();
+        }
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -36,6 +48,43 @@ public class AsistenciaController {
         Asistencia nuevaAsistencia = asistenciaRepository.save(asistencia);
         return ResponseEntity.ok(nuevaAsistencia);
     }
+
+    // Clase DTO mejorada
+    public static class AsistenciaRequest {
+        private Long userId;
+        private UserIdDTO user;
+
+        // Getters y Setters
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public UserIdDTO getUser() {
+            return user;
+        }
+
+        public void setUser(UserIdDTO user) {
+            this.user = user;
+        }
+
+        // DTO interno para el usuario
+        public static class UserIdDTO {
+            private Long id;
+
+            public Long getId() {
+                return id;
+            }
+
+            public void setId(Long id) {
+                this.id = id;
+            }
+        }
+    }
+
 
     // Obtener todas las asistencias
     @GetMapping

@@ -43,8 +43,14 @@ public class User implements UserDetails {
     }
 
 
-    @ManyToOne(fetch = FetchType.EAGER) // Ensure role is always loaded
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    // User.java
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "role_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_user_role") // Add explicit foreign key
+    )
     private Role role;
 
     // Constructors
