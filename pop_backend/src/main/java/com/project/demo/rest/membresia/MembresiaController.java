@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import com.project.demo.rest.membresia.MembresiaUpdateDTO;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -83,35 +83,35 @@ public class MembresiaController {
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<Membresia> updateMembresia(
             @PathVariable Long id,
-            @RequestBody Membresia membresiaDetails) {
+            @RequestBody MembresiaUpdateDTO updateDTO) {
 
         return membresiaRepository.findById(id)
                 .map(membresia -> {
                     // Actualizar campos básicos
-                    if (membresiaDetails.getTipo() != null) {
-                        membresia.setTipo(membresiaDetails.getTipo());
+                    if (updateDTO.getTipo() != null) {
+                        membresia.setTipo(updateDTO.getTipo());
                     }
 
-                    if (membresiaDetails.getInicio() != null) {
-                        membresia.setInicio(membresiaDetails.getInicio());
+                    if (updateDTO.getInicio() != null) {
+                        membresia.setInicio(updateDTO.getInicio());
                     }
 
-                    if (membresiaDetails.getVencimiento() != null) {
+                    if (updateDTO.getVencimiento() != null) {
                         // Validar fecha de vencimiento
                         if (membresia.getInicio() != null &&
-                                membresiaDetails.getVencimiento().isBefore(membresia.getInicio())) {
+                                updateDTO.getVencimiento().isBefore(membresia.getInicio())) {
                             throw new IllegalArgumentException("La fecha de vencimiento no puede ser anterior a la de inicio");
                         }
-                        membresia.setVencimiento(membresiaDetails.getVencimiento());
+                        membresia.setVencimiento(updateDTO.getVencimiento());
                     }
 
-                    if (membresiaDetails.getEstado() != null) {
-                        membresia.setEstado(membresiaDetails.getEstado());
+                    if (updateDTO.getEstado() != null) {
+                        membresia.setEstado(updateDTO.getEstado());
                     }
 
-                    // Actualizar usuario si se proporciona
-                    if (membresiaDetails.getUser() != null && membresiaDetails.getUser().getId() != null) {
-                        Optional<User> userOpt = userRepository.findById(membresiaDetails.getUser().getId());
+                    // Actualizar usuario usando solo el ID
+                    if (updateDTO.getUserId() != null) {
+                        Optional<User> userOpt = userRepository.findById(updateDTO.getUserId());
                         if (userOpt.isPresent()) {
                             membresia.setUser(userOpt.get());
                         } else {
@@ -124,6 +124,7 @@ public class MembresiaController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     // Eliminar membresía
     @DeleteMapping("/{id}")
