@@ -2,7 +2,6 @@ package com.project.demo.rest.clasegimnasio;
 
 import com.project.demo.logic.entity.clasegimnasio.ClaseGimnasio;
 import com.project.demo.logic.entity.clasegimnasio.ClaseGimnasioRepository;
-import com.project.demo.logic.entity.rol.RoleEnum;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,63 @@ public class ClaseGimnasioController {
     @Autowired
     private UserRepository userRepository;
 
+    // Crear nueva clase
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENTRENADOR', 'SUPER_ADMIN')")
+    public ResponseEntity<ClaseGimnasio> createClase(@RequestBody ClaseGimnasioRequest request) {
+        // Extraer el ID de entrenador del request
+        Long entrenadorId = request.getEntrenadorId();
+
+        if (entrenadorId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> entrenadorOpt = userRepository.findById(entrenadorId);
+        if (entrenadorOpt.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        ClaseGimnasio clase = new ClaseGimnasio();
+        clase.setNombre(request.getNombre());
+        clase.setHorario(request.getHorario());
+        clase.setEntrenador(entrenadorOpt.get());
+
+        ClaseGimnasio nuevaClase = claseRepository.save(clase);
+        return ResponseEntity.ok(nuevaClase);
+    }
+
+    // Clase DTO para request
+    public static class ClaseGimnasioRequest {
+        private String nombre;
+        private String horario;
+        private Long entrenadorId;
+
+        // Getters y Setters
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getHorario() {
+            return horario;
+        }
+
+        public void setHorario(String horario) {
+            this.horario = horario;
+        }
+
+        public Long getEntrenadorId() {
+            return entrenadorId;
+        }
+
+        public void setEntrenadorId(Long entrenadorId) {
+            this.entrenadorId = entrenadorId;
+        }
+    }
+
     // Obtener todas las clases
     @GetMapping
     public List<ClaseGimnasio> getAllClases() {
@@ -37,24 +93,23 @@ public class ClaseGimnasioController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Crear nueva clase
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENTRENADOR', 'SUPER_ADMIN')")
-    public ClaseGimnasio createClase(@RequestBody ClaseGimnasio clase) {
-        return claseRepository.save(clase);
-    }
-
     // Actualizar clase
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENTRENADOR', 'SUPER_ADMIN')")
     public ResponseEntity<ClaseGimnasio> updateClase(
             @PathVariable Long id,
-            @RequestBody ClaseGimnasio claseDetails) {
+            @RequestBody ClaseGimnasioRequest request) {
 
         return claseRepository.findById(id)
                 .map(clase -> {
-                    clase.setNombre(claseDetails.getNombre());
-                    clase.setHorario(claseDetails.getHorario());
+                    clase.setNombre(request.getNombre());
+                    clase.setHorario(request.getHorario());
+
+                    if (request.getEntrenadorId() != null) {
+                        Optional<User> entrenadorOpt = userRepository.findById(request.getEntrenadorId());
+                        entrenadorOpt.ifPresent(clase::setEntrenador);
+                    }
+
                     ClaseGimnasio updatedClase = claseRepository.save(clase);
                     return ResponseEntity.ok(updatedClase);
                 })
@@ -70,33 +125,6 @@ public class ClaseGimnasioController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    // Asignar entrenador a clase
-    @PostMapping("/{claseId}/asignar-entrenador/{entrenadorId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<ClaseGimnasio> asignarEntrenador(
-            @PathVariable Long claseId,
-            @PathVariable Long entrenadorId) {
-
-        Optional<ClaseGimnasio> claseOpt = claseRepository.findById(claseId);
-        Optional<User> entrenadorOpt = userRepository.findById(entrenadorId);
-
-        if (claseOpt.isEmpty() || entrenadorOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ClaseGimnasio clase = claseOpt.get();
-        User entrenador = entrenadorOpt.get();
-
-        // CORRECCIÓN: Acceder al nombre del rol a través del enum
-        if (entrenador.getRole().getName() != RoleEnum.ENTRENADOR) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        clase.asignarEntrenador(entrenador);
-        claseRepository.save(clase);
-        return ResponseEntity.ok(clase);
     }
 
     // Buscar clases por nombre
