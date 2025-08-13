@@ -1,9 +1,9 @@
 package com.project.demo.logic.entity.pago;
 
-import com.project.demo.logic.entity.membresia.Membresia;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+
 @Table(name = "axel_pago")
 @Entity
 public class Pago {
@@ -20,28 +20,19 @@ public class Pago {
     @Column(nullable = false)
     private String metodo;
 
-    @ManyToOne
-    @JoinColumn(name = "membresia_id", nullable = false)
-    private Membresia membresia;
+    @Column(name = "membresia_id", nullable = false)
+    private Long membresiaId;
 
     // Constructor por defecto
     public Pago() {
     }
 
     // Constructor con parámetros
-    public Pago(double monto, LocalDate fecha, String metodo, Membresia membresia) {
+    public Pago(double monto, LocalDate fecha, String metodo, Long membresiaId) {
         this.monto = monto;
         this.fecha = fecha;
         this.metodo = metodo;
-        this.membresia = membresia;
-    }
-
-    // Método para registrar el pago
-    public void registrarPago() {
-        // Lógica adicional si es necesario, como actualizar la membresía
-        if (this.membresia != null) {
-            this.membresia.renovar(30); // Ejemplo: renovar 30 días al pagar
-        }
+        this.membresiaId = membresiaId;
     }
 
     // Getters y setters
@@ -77,12 +68,12 @@ public class Pago {
         this.metodo = metodo;
     }
 
-    public Membresia getMembresia() {
-        return membresia;
+    public Long getMembresiaId() {
+        return membresiaId;
     }
 
-    public void setMembresia(Membresia membresia) {
-        this.membresia = membresia;
+    public void setMembresiaId(Long membresiaId) {
+        this.membresiaId = membresiaId;
     }
 
     // equals, hashCode y toString
@@ -95,12 +86,12 @@ public class Pago {
                 Objects.equals(id, pago.id) &&
                 Objects.equals(fecha, pago.fecha) &&
                 Objects.equals(metodo, pago.metodo) &&
-                Objects.equals(membresia, pago.membresia);
+                Objects.equals(membresiaId, pago.membresiaId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, monto, fecha, metodo, membresia);
+        return Objects.hash(id, monto, fecha, metodo, membresiaId);
     }
 
     @Override
@@ -110,7 +101,7 @@ public class Pago {
                 ", monto=" + monto +
                 ", fecha=" + fecha +
                 ", metodo='" + metodo + '\'' +
-                ", membresia=" + membresia +
+                ", membresiaId=" + membresiaId +
                 '}';
     }
 }

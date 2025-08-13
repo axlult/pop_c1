@@ -9,8 +9,11 @@ import java.util.List;
 
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Long> {
-    List<Pago> findByMembresia(Membresia membresia);
+    // Método actualizado para usar membresiaId
+    List<Pago> findByMembresiaId(Long membresiaId);
+
+    // Métodos existentes actualizados
     List<Pago> findByFecha(LocalDate fecha);
-    List<Pago> findByFechaBetween(LocalDate start, LocalDate end);
-    List<Pago> findByMetodo(String metodo);
+
+    List<Pago> findByFechaBetween(LocalDate fechaInicio, LocalDate fechaFin);
 }
